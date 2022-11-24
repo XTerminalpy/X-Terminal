@@ -1,0 +1,22 @@
+{
+  "Commands": {
+    "cd": {},
+    "definition": "This command is used to change directory.",
+    "usage_1": "If we type cd 'path'. It will go to the defined path by the user.",
+    "usage_2": "If the user types 'cd ../' It will go to the previous dir.",
+    "example_1": "cd Downloads' The directory will change to Downloads",
+    "example_2": "cd ../'The directory will go to the previous dir. C://(here)",
+    "echo": {},
+    "definition_3": "definition = This command will repeat the user input",
+    "usage_3": "echo 'message'. The output will be the message typed.",
+    "example_3": "echo Hello. The output will be Hello.",
+    "mkdir": {},
+    "definition_4": "This command creates new directory(folder).",
+    "usage_4": "mkdir 'name'. Here it will create a directory named the name given by the user",
+    "example_4": "mkdir Test. Here it will create a directory named Test",
+    "rmdir": {},
+    "definition_5": "This command deletes directory(folder).",
+    "usage_5": "rmdir 'name od dir'. Here it will delete the directory which is selected by the user",
+    "example_5": "'rmdir Test'. Here it will delete the directory selected"
+  }
+}
