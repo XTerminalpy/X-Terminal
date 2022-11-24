@@ -2,20 +2,23 @@
 
 import shutil
 import colorama
-import colorama
 from colorama import Back, Fore, Style
 import fnmatch
 import socket
 import time
 import os
+import json
+from re import search
+import datetime
 
 colorama.init(autoreset=True)
 path = os.getcwd()
 os.chdir(path)
 host_name = socket.gethostname()
 host_ip = socket.gethostbyname(host_name)
-print(f"{Fore.BLACK}{Back.RED}P{Back.YELLOW}y{Back.GREEN}t{Back.BLUE}e{Back.MAGENTA}r{Back.RED}m{Back.YELLOW}i{Back.GREEN}n{Back.BLUE}a{Back.MAGENTA}l")
-print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Credits: {Fore.BLUE}{Style.BRIGHT}Chaitanya, Rayirth, Empty, Dart")
+print(
+    f"{Fore.BLACK}{Back.RED}P{Back.YELLOW}y{Back.GREEN}t{Back.BLUE}e{Back.MAGENTA}r{Back.RED}m{Back.YELLOW}i{Back.GREEN}n{Back.BLUE}a{Back.MAGENTA}l")
+print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Credits: {Fore.BLUE}{Style.BRIGHT}Chaitanya, Rayirth, Dart, Empty")
 
 sure = False
 
@@ -36,7 +39,6 @@ def register_help(calls, desc):
 
 register_help(["echo"], "says what you want")
 register_help(["help"], "prints all the commands")
-register_help(["help 'name of command' "], "prints how the command works and how to use it")
 register_help(["cd"], "change directory")
 register_help(["mkdir"], "create new directory")
 register_help(["remove", "rm"], "removes the selected file")
@@ -56,17 +58,18 @@ print(help_menu)
 print(" ")
 while True:
     usr_input = input(Fore.GREEN + "( " + os.path.split(path)[1] + " )>>> ")
-    if usr_input == "echo":
-        echoinput = input("input to echo: ")
-        print(echoinput)
-        continue
-#help cmd
-    
+    if usr_input.startswith("echo"):
+        cmd = usr_input.split(" ")
+        if len(cmd) > 1:
+           _ = print(" ".join(cmd[1:]))
+        else:
+            echoinput = input("What do you want to echo?: ")
+            print(echoinput)
+
     elif usr_input == "help":
         print(help_menu)
         continue
-#cd cmd
-    
+
     elif usr_input.startswith("cd"):
         cmd = usr_input.split(" ")
         new_path = path
@@ -83,21 +86,25 @@ while True:
             print(f"{new_path}: no such file or directory")
 
         continue
-#ls cmd
+
     elif usr_input == "ls":
         list = os.listdir(path)
         for files in list:
             print(Fore.CYAN + '-' + files)
         continue
 
-#mkdir cmd
+
     elif usr_input.startswith("mkdir"):
         cmd = usr_input.split(" ")
         if len(cmd) == 2:
-            newdir = cmd[1]
-            newdir_path = os.path.join(path, newdir)
-            os.mkdir(newdir_path)
-            print("Directory '% s' created" % newdir)
+            try:
+                newdir = cmd[1]
+                newdir_path = os.path.join(path, newdir)
+                os.mkdir(newdir_path)
+                print("Directory '% s' created" % newdir)
+            except FileExistsError:
+                print("Mention dir name after space")
+            continue
 
         else:
             newdir = input("directory name: ")
@@ -105,7 +112,7 @@ while True:
             os.mkdir(newdir_path)
             print("Directory '% s' created" % newdir)
         continue
-#rmdir cmd
+
     elif usr_input.startswith("rmdir"):
         cmd = usr_input.split(" ")
         if len(cmd) == 2:
@@ -150,38 +157,47 @@ while True:
             except FileNotFoundError:
                 print("Make sure you entered the file name correctly")
             except IsADirectoryError:
-                print("Make sure you entered the file name after the space")
+                print("Make sure you enter filename after the space")
         else:
             file_to_remove = input("file name(include file extension): ")
             rmfile_path = os.path.join(path, file_to_remove)
             os.remove(rmfile_path)
             print("File '% s' removed" % file_to_remove)
         continue
-#read cmd
+
     elif usr_input.startswith("read"):
         cmd = usr_input.split(" ")
         if len(cmd) == 2:
-            filename = cmd[1]
-            filedir = os.path.join(path, filename)
-            with open(filedir) as f:
-                lines = f.read()
-                print("")
-                print("")
-                print(Fore.YELLOW + lines)
-                print("")
-                print("")
+            try:
+                filename = cmd[1]
+                filedir = os.path.join(path, filename)
+                with open(filedir) as f:
+                    lines = f.read()
+                    print("")
+                    print("")
+                    print(Fore.YELLOW + lines)
+                    print("")
+                    print("")
+
+            except FileNotFoundError:
+                print("The file you wanted to read is not found")
+
         else:
-            filename = input("file to read(include file extension): ")
-            filedir = os.path.join(path, filename)
-            with open(filedir) as f:
-                lines = f.read()
-                print("")
-                print("")
-                print(Fore.YELLOW + lines)
-                print("")
-                print("")
+            try:
+                filename = input("file to read(include file extension): ")
+                filedir = os.path.join(path, filename)
+                with open(filedir) as f:
+                    lines = f.read()
+                    print("")
+                    print("")
+                    print(Fore.YELLOW + lines)
+                    print("")
+                    print("")
+            
+            except FileNotFoundError:
+                print("The file you wanted to read is not found")
         continue
-#search cmd
+
     elif usr_input == "search":
         searchinput = input("What would you like to search for?: ")
 
@@ -199,31 +215,39 @@ while True:
         for i in files:
             print(Fore.CYAN + '-' + i)
         continue
-#create cmd
+
     elif usr_input.startswith("create"):
         cmd = usr_input.split(" ")
-        if len(cmd) < 1:
-            print("Missing argument FILE_NAME")
-            continue
-        for i in range(1, len(cmd)):
-            f = open(cmd[i], "x")
-#clear smd
+        if len(cmd) == 1:
+            for i in range(1, len(cmd)):
+                f = open(cmd[i], "x")
+                f.close()
+                print("New file created")
+        else:
+            newfilename = input("What will be the new file's name?: ")
+            newfile = os.path.join(path, newfilename)
+            f = open(newfile, "x")
+            f.close()
+            print("New file created")
+        continue
+
+
     elif usr_input == "clear":
         lines = 0
         while lines != 50:
             print(" ")
             lines += 1
         continue
-#pwd cmd
+
     elif usr_input == "pwd":
         print(os.getcwd())
-#whoami cmd
+
     elif usr_input == "whoami":
         try:
             print(os.getlogin())
         except OSError:
             print("This device has no user")
-#exec cmd
+
     elif usr_input.startswith("exec"):
         cmd = usr_input.split(" ")
         if len(cmd) < 2:
@@ -231,59 +255,48 @@ while True:
             continue
 
         _ = os.system(" ".join(cmd[1:]))
-#ping cmd
-    elif usr_input.startswith("ping"):
-        cmd = usr_input.split(" ")
-        if len(cmd) == 2:
-            hostname = cmd[1]
-            response = os.system("ping " + hostname)
 
-            # and then check the response...
-            if response == 0:
-                print(" ")
-                print(Fore.LIGHTRED_EX + hostname, 'is up!')
-            else:
-                print(" ")
-                print(Fore.LIGHTRED_EX + hostname, 'is down!')
+    elif usr_input == "ping":
+        hostname = input("address: ")
+        response = os.system("ping " + hostname)
 
+        # and then check the response...
+        if response == 0:
+            print(" ")
+            print(Fore.LIGHTRED_EX + hostname, 'is up!')
         else:
-            hostname = input("address: ")
-            response = os.system("ping " + hostname)
+            print(" ")
+            print(Fore.LIGHTRED_EX + hostname, 'is down!')
 
-            # and then check the response...
-            if response == 0:
-                print(" ")
-                print(Fore.LIGHTRED_EX + hostname, 'is up!')
+    elif usr_input == "tday":
+        x = datetime.date.today()
+        str(x)
+        print(Fore.WHITE + x)
+        print(Fore.WHITE + x.strftime("%A"))
+        continue
+
+    elif usr_input.startswith("help"):
+        cmd = usr_input.split(" ")
+        cdword = "cd"
+        if len(cmd) < 2:
+            if search(cdword, cmd):
+                print("True")
             else:
-                print(" ")
-                print(Fore.LIGHTRED_EX + hostname, 'is down!')
-        continue
+                print("False")
 
-#help_echo cmd
-    elif usr_input == ("help echo"):
-        print(f" {Fore.WHITE}{Style.DIM}echo command is used to repeat what you have typed. \n if the user type 'echo' they'll get message that 'input to echo:' \n The message gets prints which is typed after that ")
-        continue
-
-#help_cd cmd
-    elif usr_input == ("help cd"):
-        print(f" {Fore.WHITE}{Style.DIM}Cd command is used to change directory \n if the user type cd 'path' \n The cwd(current working directory) changes to the path mentonied \n example:\n 'cd Downloads' \n The cwd changes to Downloads")
-        continue
-
-#help_mkdir cmd
-    elif usr_input == ("help mkdir"):
-        print(f" {Fore.WHITE}{Style.DIM}mk dir command is to make a directory(folder) \n if the user types 'mkdir'name''\n it creates a direcotry(folder) of the name given \n example: \n 'mkdir Test' \n It created a directory(Folder) Test'")
-        continue
-
-#help_rmdir cmd
-    elif usr_input == ("help rmdir"):
-        print("")
-        continue
-#stop cmd
     elif usr_input == "stop":
         print(f"{Fore.YELLOW}BRAVO SIX GOING {Back.WHITE}{Fore.BLACK}DARK!")
+        #print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Alright then, have a nice day!")
         time.sleep(2)
         break
 
+    elif usr_input == "quit":
+        print(f"{Fore.YELLOW}BRAVO SIX GOING {Back.WHITE}{Fore.BLACK}DARK!")
+        #print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Alright then, have a nice day!")
+        time.sleep(0)
+        break
+        
+    
 
     else:
         print(f"pyterminal: {usr_input}: commmand not found")
