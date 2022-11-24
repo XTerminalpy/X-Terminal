@@ -232,12 +232,8 @@ while True:
         continue
 
 
-    elif usr_input == "clear":
-        lines = 0
-        while lines != 50:
-            print(" ")
-            lines += 1
-        continue
+    elif usr_input == "clear" or usr_input == "cls":
+        print(os.system("clear"))
 
     elif usr_input == "pwd":
         print(os.getcwd())
@@ -256,23 +252,36 @@ while True:
 
         _ = os.system(" ".join(cmd[1:]))
 
-    elif usr_input == "ping":
-        hostname = input("address: ")
-        response = os.system("ping " + hostname)
+    elif usr_input.startswith("ping"):
+        cmd = usr_input.split(" ")
+        if len(cmd) == 2:
+            hostname = cmd[1]
+            response = os.system("ping " + hostname)
 
-        # and then check the response...
-        if response == 0:
-            print(" ")
-            print(Fore.LIGHTRED_EX + hostname, 'is up!')
+            # and then check the response...
+            if response == 0:
+                print(" ")
+                print(Fore.LIGHTRED_EX + hostname, 'is up!')
+            else:
+                print(" ")
+                print(Fore.LIGHTRED_EX + hostname, 'is down!')
         else:
-            print(" ")
-            print(Fore.LIGHTRED_EX + hostname, 'is down!')
+            hostname = input("address: ")
+            response = os.system("ping " + hostname)
+
+            # and then check the response...
+            if response == 0:
+                print(" ")
+                print(Fore.LIGHTRED_EX + hostname, 'is up!')
+            else:
+                print(" ")
+                print(Fore.LIGHTRED_EX + hostname, 'is down!')
 
     elif usr_input == "tday":
         x = datetime.date.today()
         str(x)
-        print(Fore.WHITE + x)
-        print(Fore.WHITE + x.strftime("%A"))
+        print(x)
+        print(Fore.GREEN + x.strftime("%A"))
         continue
 
     elif usr_input.startswith("help"):
