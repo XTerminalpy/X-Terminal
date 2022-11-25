@@ -7,9 +7,9 @@ import fnmatch
 import socket
 import time
 import os
-import json
 from re import search
 import datetime
+import json
 
 colorama.init(autoreset=True)
 path = os.getcwd()
@@ -31,7 +31,7 @@ help_menu = f"""
 
 def register_help(calls, desc):
     options = ", ".join(calls)
-    thing = f"\n    {Fore.BLUE}{options}{Fore.RESET}"
+    thing = f"\n      {Fore.BLUE}{options}{Fore.RESET}"
     space = " " * (50 - len(thing))
     global help_menu
     help_menu += thing + space + desc
@@ -93,6 +93,16 @@ while True:
             print(Fore.CYAN + '-' + files)
         continue
 
+    #f = open('data.json')
+## returns JSON object as 
+## a dictionary
+    #data = json.load(f)
+## Iterating through the json
+## list
+    #for i in data['emp_details']:
+    #print(i)
+## Closing file
+    #f.close()
 
     elif usr_input.startswith("mkdir"):
         cmd = usr_input.split(" ")
@@ -269,6 +279,7 @@ while True:
             hostname = input("address: ")
             response = os.system("ping " + hostname)
 
+            # and then check the response...
             if response == 0:
                 print(" ")
                 print(Fore.LIGHTRED_EX + hostname, 'is up!')
