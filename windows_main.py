@@ -93,14 +93,14 @@ while True:
             print(Fore.CYAN + '-' + files)
         continue
 
-    #f = open('data.json')
+    #f = open('help_cmd.json')
 ## returns JSON object as 
 ## a dictionary
     #data = json.load(f)
 ## Iterating through the json
 ## list
-    #for i in data['emp_details']:
-    #print(i)
+    #for i in data["Commands"]:
+        #print(i)
 ## Closing file
     #f.close()
 
