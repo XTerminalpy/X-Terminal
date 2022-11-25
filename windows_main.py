@@ -269,7 +269,6 @@ while True:
             hostname = input("address: ")
             response = os.system("ping " + hostname)
 
-            # and then check the response...
             if response == 0:
                 print(" ")
                 print(Fore.LIGHTRED_EX + hostname, 'is up!')
