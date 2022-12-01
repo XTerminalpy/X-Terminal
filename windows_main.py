@@ -38,7 +38,8 @@ def register_help(calls, desc):
 
 
 register_help(["echo"], "says what you want")
-register_help(["help"], "prints all the commands")
+register_help(["helpall"], "prints all the commands")
+register_help(["help"], "helps you with a command")
 register_help(["cd"], "change directory")
 register_help(["mkdir"], "create new directory")
 register_help(["remove", "rm"], "removes the selected file")
@@ -50,9 +51,9 @@ register_help(["clear"], "clears the screen")
 register_help(["read"], "prints the content of a selected file")
 register_help(["pwd"], "prints the current working directory")
 register_help(["exec"], "execute the provided system command")
-register_help(["stop"], "exits pyterminal")
 register_help(["whoami"], "gets the current logged in user's name")
 register_help(["ping"], "pings an address")
+register_help(["stop"], "exits pyterminal")
 
 print(help_menu)
 print(" ")
@@ -61,12 +62,12 @@ while True:
     if usr_input.startswith("echo"):
         cmd = usr_input.split(" ")
         if len(cmd) > 1:
-           _ = print(" ".join(cmd[1:]))
+            _ = print(" ".join(cmd[1:]))
         else:
             echoinput = input("What do you want to echo?: ")
             print(echoinput)
 
-    elif usr_input == "help":
+    elif usr_input == "helpall":
         print(help_menu)
         continue
 
@@ -93,16 +94,34 @@ while True:
             print(Fore.CYAN + '-' + files)
         continue
 
-    #f = open('help_cmd.json')
-## returns JSON object as 
-## a dictionary
-    #data = json.load(f)
-## Iterating through the json
-## list
-    #for i in data["Commands"]:
-        #print(i)
-## Closing file
-    #f.close()
+    elif usr_input.startswith("help"):
+        cmd = usr_input.split(" ")
+
+        if len(cmd) == 2:
+            try:
+                with open('help_cmd.json') as fcc_file:
+                    data = json.load(fcc_file)["Commands"]
+                    asked_cmd = cmd[1]
+                    for i in data[asked_cmd].values():
+                        print(Fore.MAGENTA + i)
+            except KeyError:
+                print(Back.RED + Fore.BLACK + '''The command you entered after help is not found. Make sure you enter the command correctly or check even if the command exists.
+                Make sure you enter the command after the space''')
+                continue
+
+
+        else:
+            try:
+                cmdinput = input("What command would you like help with?: ")
+                with open('help_cmd.json') as fcc_file:
+                    data = json.load(fcc_file)["Commands"]
+                    asked_cmd = cmdinput
+                    for i in data[asked_cmd].values():
+                        print(Fore.MAGENTA + i)
+            except KeyError:
+                print(Back.RED + Fore.BLACK + '''The command you entered after help is not found. Make sure you enter the command correctly or check even if the command exists.
+                Make sure you enter the command after the space''')
+                continue
 
     elif usr_input.startswith("mkdir"):
         cmd = usr_input.split(" ")
@@ -203,7 +222,7 @@ while True:
                     print(Fore.YELLOW + lines)
                     print("")
                     print("")
-            
+
             except FileNotFoundError:
                 print("The file you wanted to read is not found")
         continue
@@ -305,17 +324,17 @@ while True:
 
     elif usr_input == "stop":
         print(f"{Fore.YELLOW}BRAVO SIX GOING {Back.WHITE}{Fore.BLACK}DARK!")
-        #print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Alright then, have a nice day!")
+        # print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Alright then, have a nice day!")
         time.sleep(2)
         break
 
     elif usr_input == "quit":
         print(f"{Fore.YELLOW}BRAVO SIX GOING {Back.WHITE}{Fore.BLACK}DARK!")
-        #print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Alright then, have a nice day!")
+        # print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Alright then, have a nice day!")
         time.sleep(0)
         break
-        
-    
+
+
 
     else:
         print(f"pyterminal: {usr_input}: commmand not found")
