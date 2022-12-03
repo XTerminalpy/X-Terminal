@@ -55,7 +55,10 @@ def processUserInput():
         usr_input = input(
             Fore.GREEN + "( " + os.path.split(path)[1] + " )>>> ")
 
-        if usr_input.startswith("echo"):
+        if usr_input == "":
+            continue
+
+        elif usr_input.startswith("echo"):
             cmd = usr_input.split(" ")
             toEcho = ""
             if len(cmd) > 1:
@@ -131,89 +134,69 @@ def processUserInput():
 
         elif usr_input.startswith("rmdir"):
             cmd = usr_input.split(" ")
+            dir_to_remove = ""
             if len(cmd) == 2:
-                try:
-                    dir_to_remove = cmd[1]
-                    rmdir_path = os.path.join(path, dir_to_remove)
-                    os.rmdir(rmdir_path)
-                    print("Directory '% s' removed" % dir_to_remove)
-                except OSError:
-                    print(Fore.RED + Style.BRIGHT +
-                          "The direcotry has files in it...")
-                    sure = input(
-                        f"{Fore.RED}{Style.BRIGHT} Are you sure you want to remove it? {Fore.YELLOW}{Style.DIM}[Y/n]: ").lower()
-                    if sure == "yes" or sure == "y":
-                        shutil.rmtree(rmdir_path)
-                    else:
-                        print("canceled..")
-                    continue
+                dir_to_remove = cmd[1]
             else:
-                try:
-                    dir_to_remove = input("directory name: ")
-                    rmdir_path = os.path.join(path, dir_to_remove)
-                    os.rmdir(rmdir_path)
-                    print("Directory '% s' removed" % dir_to_remove)
-                except OSError:
-                    print(Fore.RED + Style.BRIGHT +
-                          "The direcotry has files in it...")
-                    sure = input(
-                        f"{Fore.RED}{Style.BRIGHT} Are you sure you want to remove it? {Fore.YELLOW}{Style.DIM}[Y/n]: ").lower()
-                    if sure == "yes" or sure == "y":
-                        shutil.rmtree(rmdir_path)
-                    else:
-                        print("canceled..")
+                dir_to_remove = input("directory name: ")
+
+            rmdir_path = os.path.join(path, dir_to_remove)
+
+            if not os.path.exists(rmdir_path):
+                print(f"{rmdir_path}: no such file or directory")
+                continue
+
+            if len(os.listdir(rmdir_path)) > 0:
+                print(Fore.RED + Style.BRIGHT +
+                      "The directory has files in it...")
+                sure = input(
+                    f"{Fore.RED}{Style.BRIGHT} Are you sure you want to remove it? {Fore.YELLOW}{Style.DIM}[Y/n]{Fore.RESET}: ").lower()
+                if sure == "yes" or sure == "y":
+                    shutil.rmtree(rmdir_path)
+                continue
+
+            os.rmdir(rmdir_path)
+            print("Directory '% s' removed" % dir_to_remove)
             continue
 
         elif usr_input.startswith("rm"):
             cmd = usr_input.split(" ")
+            file_to_remove = ""
             if len(cmd) == 2:
-                try:
-                    file_to_remove = cmd[1]
-                    rmfile_path = os.path.join(path, file_to_remove)
-                    os.remove(rmfile_path)
-                    print("File '% s' removed" % file_to_remove)
-                except FileNotFoundError:
-                    print("Make sure you entered the file name correctly")
-                except IsADirectoryError:
-                    print("Make sure you enter filename after the space")
+                file_to_remove = cmd[1]
             else:
-                file_to_remove = input("file name(include file extension): ")
-                rmfile_path = os.path.join(path, file_to_remove)
-                os.remove(rmfile_path)
-                print("File '% s' removed" % file_to_remove)
+                file_to_remove = input("filename (include file extension): ")
+
+            rmfile_path = os.path.join(path, file_to_remove)
+
+            if not os.path.exists(rmfile_path):
+                print(f"{file_to_remove}: no such file")
+                continue
+
+            if os.path.isdir(rmfile_path):
+                print(f"{file_to_remove}: is a directory, please us rmdir instead")
+                continue
+
+            os.remove(rmfile_path)
+            print("File '% s' removed" % file_to_remove)
             continue
 
         elif usr_input.startswith("read"):
             cmd = usr_input.split(" ")
+            filename = ""
             if len(cmd) == 2:
-                try:
-                    filename = cmd[1]
-                    filedir = os.path.join(path, filename)
-                    with open(filedir) as f:
-                        lines = f.read()
-                        print("")
-                        print("")
-                        print(Fore.YELLOW + lines)
-                        print("")
-                        print("")
-
-                except FileNotFoundError:
-                    print("The file you wanted to read is not found")
-
+                filename = cmd[1]
             else:
-                try:
-                    filename = input("file to read(include file extension): ")
-                    filedir = os.path.join(path, filename)
-                    with open(filedir) as f:
-                        lines = f.read()
-                        print("")
-                        print("")
-                        print(Fore.YELLOW + lines)
-                        print("")
-                        print("")
+                filename = input("file to read(include file extension): ")
 
-                except FileNotFoundError:
-                    print("The file you wanted to read is not found")
+            filedir = os.path.join(path, filename)
+
+            if not os.path.exists(filedir):
+                print(f"{filename}: no such file ")
+                continue
+
+            with open(filedir, "r") as f:
+                print("\n\n" + Fore.YELLOW + f.read() + "\n\n")
             continue
 
         elif usr_input == "search":
@@ -234,7 +217,7 @@ def processUserInput():
 
         elif usr_input.startswith("create"):
             cmd = usr_input.split(" ")
-            if len(cmd) == 1:
+            if len(cmd) > 2:
                 for i in range(1, len(cmd)):
                     f = open(cmd[i], "x")
                     f.close()
@@ -248,7 +231,7 @@ def processUserInput():
             continue
 
         elif usr_input == "clear" or usr_input == "cls":
-            print(os.system("clear"))
+            _ = os.system("clear")
 
         elif usr_input == "pwd":
             print(os.getcwd())
@@ -269,44 +252,26 @@ def processUserInput():
 
         elif usr_input.startswith("ping"):
             cmd = usr_input.split(" ")
+            hostname = ""
             if len(cmd) == 2:
                 hostname = cmd[1]
-                response = os.system("ping " + hostname)
-
-                # and then check the response...
-                if response == 0:
-                    print(" ")
-                    print(Fore.LIGHTRED_EX + hostname, 'is up!')
-                else:
-                    print(" ")
-                    print(Fore.LIGHTRED_EX + hostname, 'is down!')
             else:
                 hostname = input("address: ")
-                response = os.system("ping " + hostname)
 
-                # and then check the response...
-                if response == 0:
-                    print(" ")
-                    print(Fore.LIGHTRED_EX + hostname, 'is up!')
-                else:
-                    print(" ")
-                    print(Fore.LIGHTRED_EX + hostname, 'is down!')
+            response = os.system("ping " + hostname)
+            # and then check the response...
+            if response == 0:
+                print(" ")
+                print(Fore.LIGHTRED_EX + hostname, 'is up!')
+            else:
+                print(" ")
+                print(Fore.LIGHTRED_EX + hostname, 'is down!')
 
         elif usr_input == "tday":
             x = datetime.date.today()
-            str(x)
             print(x)
             print(Fore.GREEN + x.strftime("%A"))
             continue
-
-        elif usr_input.startswith("help"):
-            cmd = usr_input.split(" ")
-            cdword = "cd"
-            if len(cmd) < 2:
-                if search(cdword, cmd):
-                    print("True")
-                else:
-                    print("False")
 
         elif usr_input == "stop" or usr_input == "quit":
             print(f"{Fore.YELLOW}BRAVO SIX GOING {Back.WHITE}{Fore.BLACK}DARK!")
