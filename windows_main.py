@@ -54,8 +54,9 @@ def processUserInput():
     while True:
         usr_input = input(
             Fore.GREEN + "( " + os.path.split(path)[1] + " )>>> ")
-        
-        if usr_input == "": continue
+
+        if usr_input == "":
+            continue
 
         elif usr_input.startswith("echo"):
             cmd = usr_input.split(" ")
@@ -146,8 +147,10 @@ def processUserInput():
                 continue
 
             if len(os.listdir(rmdir_path)) > 0:
-                print(Fore.RED + Style.BRIGHT + "The directory has files in it...")
-                sure = input(f"{Fore.RED}{Style.BRIGHT} Are you sure you want to remove it? {Fore.YELLOW}{Style.DIM}[Y/n]{Fore.RESET}: ").lower()
+                print(Fore.RED + Style.BRIGHT +
+                      "The directory has files in it...")
+                sure = input(
+                    f"{Fore.RED}{Style.BRIGHT} Are you sure you want to remove it? {Fore.YELLOW}{Style.DIM}[Y/n]{Fore.RESET}: ").lower()
                 if sure == "yes" or sure == "y":
                     shutil.rmtree(rmdir_path)
                 continue
@@ -169,7 +172,7 @@ def processUserInput():
             if not os.path.exists(rmfile_path):
                 print(f"{file_to_remove}: no such file")
                 continue
-            
+
             if os.path.isdir(rmfile_path):
                 print(f"{file_to_remove}: is a directory, please us rmdir instead")
                 continue
@@ -254,7 +257,7 @@ def processUserInput():
                 hostname = cmd[1]
             else:
                 hostname = input("address: ")
-            
+
             response = os.system("ping " + hostname)
             # and then check the response...
             if response == 0:
