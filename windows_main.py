@@ -54,13 +54,17 @@ def processUserInput():
     while True:
         usr_input = input(
             Fore.GREEN + "( " + os.path.split(path)[1] + " )>>> ")
+
         if usr_input.startswith("echo"):
             cmd = usr_input.split(" ")
+            toEcho = ""
             if len(cmd) > 1:
-                _ = print(" ".join(cmd[1:]))
+                toEcho = " ".join(cmd[1:])
             else:
-                echoinput = input("What do you want to echo?: ")
-                print(echoinput)
+                toEcho = input("What do you want to echo?: ")
+
+            print(toEcho)
+            continue
 
         elif usr_input == "helpall":
             print(help_menu)
@@ -84,57 +88,45 @@ def processUserInput():
             continue
 
         elif usr_input == "ls":
-            list = os.listdir(path)
-            for files in list:
+            for files in os.listdir(path):
                 print(Fore.CYAN + '-' + files)
             continue
 
         elif usr_input.startswith("help"):
             cmd = usr_input.split(" ")
-
+            asked_cmd = ""
             if len(cmd) == 2:
-                try:
-                    with open('help_cmd.json') as fcc_file:
-                        data = json.load(fcc_file)["Commands"]
-                        asked_cmd = cmd[1]
-                        for i in data[asked_cmd].values():
-                            print(Fore.MAGENTA + i)
-                except KeyError:
-                    print(Back.RED + Fore.BLACK + '''The command you entered after help is not found. Make sure you enter the command correctly or check even if the command exists.
-                    Make sure you enter the command after the space''')
+                asked_cmd = cmd[1]
+            else:
+                asked_cmd = input("What command would you like help with?: ")
+
+            with open('help_cmd.json') as fcc_file:
+                data = json.load(fcc_file)["Commands"]
+                asked_cmd = cmd[1]
+
+                if not (asked_cmd in data):
+                    print(Back.RED + Fore.BLACK + '''The command you entered after help is not found. Make sure you enter the command correctly or check even if the command exists.\nMake sure you enter the command after the space''')
                     continue
 
-            else:
-                try:
-                    cmdinput = input(
-                        "What command would you like help with?: ")
-                    with open('help_cmd.json') as fcc_file:
-                        data = json.load(fcc_file)["Commands"]
-                        asked_cmd = cmdinput
-                        for i in data[asked_cmd].values():
-                            print(Fore.MAGENTA + i)
-                except KeyError:
-                    print(Back.RED + Fore.BLACK + '''The command you entered after help is not found. Make sure you enter the command correctly or check even if the command exists.
-                    Make sure you enter the command after the space''')
-                    continue
+                for i in data[asked_cmd].values():
+                    print(Fore.MAGENTA + i)
 
         elif usr_input.startswith("mkdir"):
             cmd = usr_input.split(" ")
+            newdir = ""
             if len(cmd) == 2:
-                try:
-                    newdir = cmd[1]
-                    newdir_path = os.path.join(path, newdir)
-                    os.mkdir(newdir_path)
-                    print("Directory '% s' created" % newdir)
-                except FileExistsError:
-                    print("Mention dir name after space")
-                continue
-
+                newdir = cmd[1]
             else:
                 newdir = input("directory name: ")
-                newdir_path = os.path.join(path, newdir)
-                os.mkdir(newdir_path)
-                print("Directory '% s' created" % newdir)
+
+            newdir_path = os.path.join(path, newdir)
+
+            if os.path.exists(newdir_path):
+                print(f"mkdir: {newdir} already exists")
+                continue
+
+            os.mkdir(newdir_path)
+            print("Directory '% s' created" % newdir)
             continue
 
         elif usr_input.startswith("rmdir"):
