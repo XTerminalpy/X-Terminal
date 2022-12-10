@@ -1,0 +1,12 @@
+description = "the command's description"
+
+
+# must have
+def run(args: str, ro_path:str):
+    # do smth with args
+    pass
+
+
+# must have
+def constructor():
+    return {"description": description, "exec": run}
