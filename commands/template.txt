@@ -1,5 +1,5 @@
 description = "the command's description"
-
+usage = []
 
 # must have
 def run(args: str, ro_path:str):
@@ -9,4 +9,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description, "usage":usage, "exec": run}

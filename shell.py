@@ -16,6 +16,7 @@ help_menu = f"""
 
 {Fore.RED}COMMANDS{Fore.RESET}:"""
 
+
 def register_help(calls, desc):
     options = ", ".join(calls)
     thing = f"\n      {Fore.BLUE}{options}{Fore.RESET}"
@@ -23,14 +24,15 @@ def register_help(calls, desc):
     global help_menu
     help_menu += thing + space + desc
 
+
 def print_banner():
     print(f"{Fore.BLACK}{Back.RED}P{Back.YELLOW}y{Back.GREEN}t{Back.BLUE}e{Back.MAGENTA}r{Back.RED}m{Back.YELLOW}i{Back.GREEN}n{Back.BLUE}a{Back.MAGENTA}l{Back.RESET}{Fore.RESET}")
     print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Credits: {Fore.BLUE}{Style.BRIGHT}Chaitanya, Rayirth, Dart, Empty{Back.RESET}{Fore.RESET}")
 
 
 def load_commands():
-    ## Note that commands that mutate anything being
-    ## in this file must be with the other built-ins starting at line 67
+    # Note that commands that mutate anything being
+    # in this file must be with the other built-ins starting at line 67
 
     for file in os.listdir(commands_dir):
         if not file.endswith(".py"):
@@ -46,6 +48,9 @@ def load_commands():
         commands.append(globals()[name].constructor())
 
         register_help([name], globals()[name].description)
+
+    register_help(["cd"], "This command is used to change directory.")
+    register_help(["help"], "This command shows this page")
 
 
 def process_user_input():
@@ -66,7 +71,33 @@ def process_user_input():
 
         # check built-ins
         elif requested_cmd == "help":
-            print(help_menu + "\n")
+            args = user_input.split(" ")
+            if len(args) < 2:
+                print(help_menu + "\n")
+                continue
+
+            requested_cmd_help = args[1]
+            if not requested_cmd_help in commands_names:
+                print(f"pyterminal: no available help for {requested_cmd_help}")
+                continue
+
+            index = commands_names.index(requested_cmd_help)
+            usages = commands[index]["usage"]
+            description = commands[index]["description"]
+
+            print(f"""{Fore.RED}{requested_cmd_help}{Fore.RESET}:
+"{description}"
+
+{Fore.BLUE}USAGE{Fore.RESET}:""")
+
+            if len(usages) == 0:
+                print(f"No usage exemples were written for that command yet")
+                continue
+
+            for usage in usages:
+                print(usage)
+            
+            print("")
 
         elif requested_cmd == "cd":
             cmd = user_input.split(" ")

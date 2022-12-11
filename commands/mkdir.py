@@ -1,5 +1,10 @@
 description = "This command creates new directory(folder)."
 
+usage = [
+        "mkdir 'name'. Here it will create a directory named the name given by the user",
+        "mkdir Test. Here it will create a directory named Test"
+        ]
+
 import os
 # must have
 def run(args: str, ro_path:str):
@@ -23,4 +28,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}

@@ -1,4 +1,9 @@
 description = "This command searches for an existing file in the cwd(current working directory)"
+usage = [
+        "search 'name(with ext)'. Here it shows the path of the searched file",
+        "'search file.txt'. Here it shows the path of the file 'file.txt'"
+        ]
+
 
 import fnmatch, os
 from colorama import Fore
@@ -22,4 +27,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}

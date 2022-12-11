@@ -1,4 +1,9 @@
 description = "This command deletes directory(folder)"
+usage = [
+        "rmdir 'name od dir'. Here it will delete the directory which is selected by the user",
+        "'rmdir Test'. Here it will delete the directory selected"
+        ]
+
 
 import os, shutil
 from colorama import Fore, Style
@@ -33,4 +38,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}

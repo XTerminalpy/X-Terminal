@@ -1,4 +1,8 @@
 description = "This command show to information typed inside a file"
+usage = [
+        "read 'file name(with ext)'. It prints the charecters present in it.",
+        "'read file.txt' If we type this command the Terminal prints the data present in it."
+        ]
 
 import os
 from colorama import Fore
@@ -24,4 +28,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}

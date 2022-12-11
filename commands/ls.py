@@ -1,4 +1,5 @@
 description = "This commands shows the list of files in cwd(current working directory)"
+usage = ["'ls'. It shows all the files and folders in the cwd(current workinf directory)"]
 
 from colorama import Fore
 import os
@@ -14,4 +15,4 @@ def run(args: str, ro_path):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}

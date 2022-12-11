@@ -1,5 +1,8 @@
 description = "This command is used to create files in the selected dir"
-
+usage = [
+        "create 'name(with ext)'. Here it will create a file in the cwd(current working directory) name given in the user input",
+        "'create file.txt'. Here it will create a file named file.txt on the cwd"
+        ]
 # must have
 import os
 def run(args: str, ro_path:str):
@@ -19,4 +22,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}

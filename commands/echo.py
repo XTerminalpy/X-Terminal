@@ -1,5 +1,8 @@
 description = "This command will repeat the user input"
-
+usage = [
+        "echo 'message'. The output will be the message typed.",
+        "echo Hello. The output will be Hello."
+        ]
 # must have
 def run(args: str, ro_path:str):
     cmd = args.split(" ")
@@ -14,4 +17,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}

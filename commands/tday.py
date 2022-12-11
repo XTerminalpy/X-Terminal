@@ -1,4 +1,6 @@
 description = "This command prints the date and the day"
+usage = []
+
 
 import datetime
 from colorama import Fore
@@ -12,4 +14,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage,  "exec": run}

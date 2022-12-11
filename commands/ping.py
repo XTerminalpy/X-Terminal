@@ -1,4 +1,8 @@
 description = "This command is used to check the ping of the the website mentioned"
+usage = [
+        "ping 'website'. It shows the ping of the website mentioned",
+        "'ping google.com'. It shows the ping of google"
+        ]
 
 # must have
 import os
@@ -23,4 +27,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}

@@ -1,4 +1,5 @@
 description = "Quits the terminal"
+usage = ["'quit'. The terminal will stop and close"]
 
 import time
 from sys import exit
@@ -12,4 +13,4 @@ def run(args: str, ro_path):# must have
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}

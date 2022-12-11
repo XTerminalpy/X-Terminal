@@ -1,4 +1,8 @@
 description = "This command remove the selected file in the cwd(current working directory)"
+usage = [
+        "rm 'name(withext)'. Here it will delete this file",
+        "'rm file.txt'. Here it will delete this file.txt"
+        ]
 
 import os
 # must have
@@ -27,4 +31,4 @@ def run(args: str, ro_path:str):
 
 # must have
 def constructor():
-    return {"description": description, "exec": run}
+    return {"description": description,"usage":usage, "exec": run}
