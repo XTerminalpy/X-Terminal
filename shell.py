@@ -123,5 +123,7 @@ def process_user_input():
 if __name__ == "__main__":
     load_commands()
     print_banner()
-    print(help_menu + "\n")
+    # print(help_menu + "\n")
+
+    print(f"""{Fore.RED}help{Fore.RESET}: Type 'help' to get a list of all commands available! """)
     process_user_input()
