@@ -17,7 +17,7 @@ def run(args: str, ro_path:str):
 
     filedir = os.path.join(ro_path, filename)
 
-    if not os.path.exists(filedir):
+    if not os.path.exists(filedir) or os.path.isdir(filedir):
         print(f"{filename}: no such file ")
         return
 
