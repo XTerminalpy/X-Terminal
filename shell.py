@@ -26,7 +26,7 @@ def register_help(calls, desc):
 
 
 def print_banner():
-    print(f"{Fore.BLACK}{Back.RED}P{Back.YELLOW}y{Back.GREEN}t{Back.BLUE}e{Back.MAGENTA}r{Back.RED}m{Back.YELLOW}i{Back.GREEN}n{Back.BLUE}a{Back.MAGENTA}l{Back.RESET}{Fore.RESET}")
+    print(f"{Fore.BLACK}{Back.RED}X{Back.YELLOW}-{Back.GREEN}T{Back.BLUE}e{Back.MAGENTA}r{Back.RED}m{Back.YELLOW}i{Back.GREEN}n{Back.BLUE}a{Back.MAGENTA}l{Back.RESET}{Fore.RESET}")
     print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}Credits: {Fore.BLUE}{Style.BRIGHT}Chaitanya, Rayirth, Dart, Empty{Back.RESET}{Fore.RESET}")
 
 
@@ -57,7 +57,7 @@ def process_user_input():
     global path
     while True:
         user_input = input(
-            Fore.GREEN + "( " + os.path.split(path)[1] + " )>>> ")
+            Fore.GREEN + "( " + path + " )>>> ")
         requested_cmd = user_input.split(" ")[0]
 
         # process returns and spaces
